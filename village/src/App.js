@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {
   Route,
-  Switch, withRouter
+  Switch,
+  withRouter
 } from 'react-router-dom';
 import axios from 'axios';
 import './App.css';
@@ -32,9 +33,22 @@ class App extends Component {
       axios.post( 'http://localhost:3333/smurfs', smurf )
            .then( res => this.setState( {smurfs: res.data} ) )
            .catch( err => console.log( err ) );
-      this.props.history.push('/');
+      this.props.history.push( '/' );
     } catch (err) {
       console.log( err );
+    }
+  };
+
+  deleteSmurf = smurfId => {
+    try {
+      axios.delete( `http://localhost:3333/smurfs/${smurfId}` )
+           .then( res => {
+             const updatedSmurfs = this.state.smurfs.filter( smurf => smurf.id !== smurfId );
+             this.setState( {smurfs: updatedSmurfs} );
+           } )
+           .catch( err => console.log( err ) );
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -44,10 +58,11 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Navbar/>
+        <Navbar />
         <Switch>
           <Route exact path='/'
-                 render={() => <Smurfs smurfs={this.state.smurfs} />} />
+                 render={() => <Smurfs smurfs={this.state.smurfs}
+                                       deleteSmurf={this.deleteSmurf} />} />
           <Route path='/smurf-form'
                  render={() => <SmurfForm addSmurf={this.addSmurf} />} />
 
@@ -57,4 +72,4 @@ class App extends Component {
   }
 }
 
-export default withRouter(App);
+export default withRouter( App );
