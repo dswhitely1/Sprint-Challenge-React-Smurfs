@@ -29,6 +29,7 @@ class App extends Component {
   }
 
   addSmurf = smurf => {
+    console.log('add');
     try {
       axios.post( 'http://localhost:3333/smurfs', smurf )
            .then( res => this.setState( {smurfs: res.data} ) )
@@ -48,7 +49,22 @@ class App extends Component {
            } )
            .catch( err => console.log( err ) );
     } catch (err) {
-      console.log(err);
+      console.log( err );
+    }
+  };
+
+  updateSmurf = smurf => {
+    console.log('update');
+    try {
+      axios.put( `http://localhost:3333/smurfs/${smurf.id}`, smurf )
+           .then( res => {
+             const updatedSmurfs = this.state.smurfs.map( thisSmurf => thisSmurf.id === smurf.id ? smurf : thisSmurf );
+             this.setState( {smurfs: updatedSmurfs} );
+             this.props.history.push( '/' );
+           } )
+           .catch( err => console.log( err ) );
+    } catch (err) {
+      console.log( err );
     }
   };
 
@@ -63,9 +79,16 @@ class App extends Component {
           <Route exact path='/'
                  render={() => <Smurfs smurfs={this.state.smurfs}
                                        deleteSmurf={this.deleteSmurf} />} />
-          <Route path='/smurf-form'
-                 render={() => <SmurfForm addSmurf={this.addSmurf} />} />
-
+          <Route exact path='/smurf-form'
+                 render={props => <SmurfForm {...props} key={'addSmurf'}
+                                             addSmurf={this.addSmurf}
+                                             updateSmurf={this.updateSmurf} />} />
+          <Route path='/smurf-form/:smurfId'
+                 render={props => <SmurfForm {...props}
+                                             updateSmurf={this.updateSmurf}
+                                             key={'editSmurf'}
+                                             smurfs={this.state.smurfs}
+                                             addSmurf={this.addSmurf} />} />
         </Switch>
       </div>
     );

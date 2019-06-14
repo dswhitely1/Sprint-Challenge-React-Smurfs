@@ -1,28 +1,45 @@
 import React, { Component } from 'react';
 
 class SmurfForm extends Component {
-  constructor(props) {
-    super(props);
+  constructor( props ) {
+    super( props );
     this.state = {
-      name: '',
-      age: '',
+      name  : '',
+      age   : '',
       height: ''
     };
   }
 
+  componentDidMount() {
+    try {
+      if (this.props.smurfs) {
+        const targetedSmurf=this.props.smurfs.filter(smurf => smurf.id.toString() === this.props.match.params.smurfId)[0];
+        console.log(targetedSmurf);
+        const {id, name, age, height} = targetedSmurf;
+        this.setState({id,name,age,height, buttonMsg: 'Edit this smurf'})
+      } else {
+        this.setState({
+          name  : '',
+          age   : '',
+          height: '',
+          buttonMsg: 'Add to the Village'
+        })
+      }
+    } catch(err) {
+      this.props.history.push('/')
+    }
+
+}
   addSmurf = event => {
     event.preventDefault();
     // add code to create the smurf using the api
-    this.props.addSmurf(this.state);
-    this.setState({
-      name: '',
-      age: '',
-      height: ''
-    });
-  }
+
+
+    this.state.id !== undefined ? this.props.updateSmurf(this.state) : this.props.addSmurf( this.state );
+  };
 
   handleInputChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
+    this.setState( {[e.target.name]: e.target.value} );
   };
 
   render() {
@@ -47,7 +64,7 @@ class SmurfForm extends Component {
             value={this.state.height}
             name="height"
           />
-          <button type="submit">Add to the village</button>
+          <button type="submit">{this.state.buttonMsg}</button>
         </form>
       </div>
     );
