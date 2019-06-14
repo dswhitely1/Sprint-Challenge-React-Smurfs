@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
+import {
+  Route,
+  Switch, withRouter
+} from 'react-router-dom';
 import axios from 'axios';
 import './App.css';
 import SmurfForm from './components/SmurfForm';
 import Smurfs from './components/Smurfs';
+import Navbar from './components/Navbar';
 
 class App extends Component {
   constructor( props ) {
@@ -27,6 +32,7 @@ class App extends Component {
       axios.post( 'http://localhost:3333/smurfs', smurf )
            .then( res => this.setState( {smurfs: res.data} ) )
            .catch( err => console.log( err ) );
+      this.props.history.push('/');
     } catch (err) {
       console.log( err );
     }
@@ -38,11 +44,17 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <SmurfForm addSmurf={this.addSmurf} />
-        <Smurfs smurfs={this.state.smurfs} />
+        <Navbar/>
+        <Switch>
+          <Route exact path='/'
+                 render={() => <Smurfs smurfs={this.state.smurfs} />} />
+          <Route path='/smurf-form'
+                 render={() => <SmurfForm addSmurf={this.addSmurf} />} />
+
+        </Switch>
       </div>
     );
   }
 }
 
-export default App;
+export default withRouter(App);
