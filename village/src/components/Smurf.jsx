@@ -16,11 +16,11 @@ const Smurf = ( {id, height, age, name, deleteSmurf} ) => {
           <button className='btn btn-info mr-2'>Edit</button>
         </Link>
 
-        <Link to='/'>
-          <button className='btn btn-danger'
-                  onClick={() => deleteSmurf( id )}>Delete
-          </button>
-        </Link>
+
+        <button className='btn btn-danger'
+                onClick={() => deleteSmurf( id )}>Delete
+        </button>
+
       </div>
     </div>
   );

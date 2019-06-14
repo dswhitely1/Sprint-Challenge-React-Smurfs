@@ -27,39 +27,33 @@ class App extends Component {
     }
   }
 
-  addSmurf = smurf => {
+  addSmurf = async smurf => {
     try {
-      axios.post( 'http://localhost:3333/smurfs', smurf )
-           .then( res => this.setState( {smurfs: res.data} ) )
-           .catch( err => console.log( err ) );
+      const response = await axios.post( 'http://localhost:3333/smurfs', smurf );
+      this.setState( {smurfs: response.data} );
+
       this.props.history.push( '/' );
     } catch (err) {
       console.log( err );
     }
   };
 
-  deleteSmurf = smurfId => {
+  deleteSmurf = async smurfId => {
     try {
-      axios.delete( `http://localhost:3333/smurfs/${smurfId}` )
-           .then( res => {
-             const updatedSmurfs = this.state.smurfs.filter( smurf => smurf.id !== smurfId );
-             this.setState( {smurfs: updatedSmurfs} );
-           } )
-           .catch( err => console.log( err ) );
+      const response      = await axios.delete( `http://localhost:3333/smurfs/${smurfId}` );
+      const updatedSmurfs = this.state.smurfs.filter( smurf => smurf.id !== smurfId );
+      this.setState( {smurfs: updatedSmurfs} );
     } catch (err) {
       console.log( err );
     }
   };
 
-  updateSmurf = smurf => {
+  updateSmurf = async smurf => {
     try {
-      axios.put( `http://localhost:3333/smurfs/${smurf.id}`, smurf )
-           .then( res => {
-             const updatedSmurfs = this.state.smurfs.map( thisSmurf => thisSmurf.id === smurf.id ? smurf : thisSmurf );
-             this.setState( {smurfs: updatedSmurfs} );
-             this.props.history.push( '/' );
-           } )
-           .catch( err => console.log( err ) );
+      const response      = await axios.put( `http://localhost:3333/smurfs/${smurf.id}`, smurf );
+      const updatedSmurfs = this.state.smurfs.map( thisSmurf => thisSmurf.id === smurf.id ? smurf : thisSmurf );
+      this.setState( {smurfs: updatedSmurfs} );
+      this.props.history.push( '/' );
     } catch (err) {
       console.log( err );
     }
@@ -73,27 +67,29 @@ class App extends Component {
       <div>
         <Navigation />
         <div className='container'>
-        <Switch>
-          <Route exact path='/'
-                 render={props => <Smurfs {...props} smurfs={this.state.smurfs}
-                                          key={'all'}
-                                          deleteSmurf={this.deleteSmurf} />} />
-          <Route path={`/view-smurf/:smurfId`}
-                 render={props => <Smurfs {...props} smurfs={this.state.smurfs}
-                                          key={'single'}
-                                          deleteSmurf={this.deleteSmurf} />} />
-          <Route exact path='/smurf-form'
-                 render={props => <SmurfForm {...props} key={'addSmurf'}
-                                             addSmurf={this.addSmurf}
-                                             updateSmurf={this.updateSmurf} />} />
-          <Route path='/smurf-form/:smurfId'
-                 render={props => <SmurfForm {...props}
-                                             updateSmurf={this.updateSmurf}
-                                             key={'editSmurf'}
-                                             smurfs={this.state.smurfs}
-                                             addSmurf={this.addSmurf} />} />
-        </Switch>
-      </div>
+          <Switch>
+            <Route exact path='/'
+                   render={props => <Smurfs {...props}
+                                            smurfs={this.state.smurfs}
+                                            key={'all'}
+                                            deleteSmurf={this.deleteSmurf} />} />
+            <Route path={`/view-smurf/:smurfId`}
+                   render={props => <Smurfs {...props}
+                                            smurfs={this.state.smurfs}
+                                            key={'single'}
+                                            deleteSmurf={this.deleteSmurf} />} />
+            <Route exact path='/smurf-form'
+                   render={props => <SmurfForm {...props} key={'addSmurf'}
+                                               addSmurf={this.addSmurf}
+                                               updateSmurf={this.updateSmurf} />} />
+            <Route path='/smurf-form/:smurfId'
+                   render={props => <SmurfForm {...props}
+                                               updateSmurf={this.updateSmurf}
+                                               key={'editSmurf'}
+                                               smurfs={this.state.smurfs}
+                                               addSmurf={this.addSmurf} />} />
+          </Switch>
+        </div>
       </div>
     );
   }
