@@ -29,7 +29,7 @@ class App extends Component {
   }
 
   addSmurf = smurf => {
-    console.log('add');
+    console.log( 'add' );
     try {
       axios.post( 'http://localhost:3333/smurfs', smurf )
            .then( res => this.setState( {smurfs: res.data} ) )
@@ -54,7 +54,7 @@ class App extends Component {
   };
 
   updateSmurf = smurf => {
-    console.log('update');
+    console.log( 'update' );
     try {
       axios.put( `http://localhost:3333/smurfs/${smurf.id}`, smurf )
            .then( res => {
@@ -77,8 +77,13 @@ class App extends Component {
         <Navbar />
         <Switch>
           <Route exact path='/'
-                 render={() => <Smurfs smurfs={this.state.smurfs}
-                                       deleteSmurf={this.deleteSmurf} />} />
+                 render={props => <Smurfs {...props} smurfs={this.state.smurfs}
+                                          key={'all'}
+                                          deleteSmurf={this.deleteSmurf} />} />
+          <Route path={`/view-smurf/:smurfId`}
+                 render={props => <Smurfs {...props} smurfs={this.state.smurfs}
+                                          key={'single'}
+                                          deleteSmurf={this.deleteSmurf} />} />
           <Route exact path='/smurf-form'
                  render={props => <SmurfForm {...props} key={'addSmurf'}
                                              addSmurf={this.addSmurf}
