@@ -33,12 +33,12 @@ class Smurfs extends Component {
   }
 
   render() {
-    console.log( this.props );
+    const {smurfs} = this.state;
     return (
       <div className="Smurfs text-center">
         <h1>Smurf Village</h1>
         <ul>
-          {this.state.smurfs.map( smurf => {
+          {smurfs.map( smurf => {
             return (
               <Smurf
                 name={smurf.name}

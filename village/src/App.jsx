@@ -28,7 +28,6 @@ class App extends Component {
   }
 
   addSmurf = smurf => {
-    console.log( 'add' );
     try {
       axios.post( 'http://localhost:3333/smurfs', smurf )
            .then( res => this.setState( {smurfs: res.data} ) )
@@ -53,7 +52,6 @@ class App extends Component {
   };
 
   updateSmurf = smurf => {
-    console.log( 'update' );
     try {
       axios.put( `http://localhost:3333/smurfs/${smurf.id}`, smurf )
            .then( res => {
