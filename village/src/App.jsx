@@ -5,10 +5,9 @@ import {
   withRouter
 } from 'react-router-dom';
 import axios from 'axios';
-import './App.css';
 import SmurfForm from './components/SmurfForm';
 import Smurfs from './components/Smurfs';
-import Navbar from './components/Navbar';
+import Navigation from './components/Navigation';
 
 class App extends Component {
   constructor( props ) {
@@ -73,8 +72,9 @@ class App extends Component {
   // You'll need to make sure you have the right properties on state and pass them down to props.
   render() {
     return (
-      <div className="App">
-        <Navbar />
+      <div>
+        <Navigation />
+        <div className='container'>
         <Switch>
           <Route exact path='/'
                  render={props => <Smurfs {...props} smurfs={this.state.smurfs}
@@ -95,6 +95,7 @@ class App extends Component {
                                              smurfs={this.state.smurfs}
                                              addSmurf={this.addSmurf} />} />
         </Switch>
+      </div>
       </div>
     );
   }
